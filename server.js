@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const fs = require('fs');
 const savedNotes = require('./db/db.json');
 const PORT = process.env.PORT || 3001;
 
@@ -21,7 +22,11 @@ app.get('/api/notes', (req, res) => {
 
 // Add new notes
 app.post('/api/notes', (req, res) => {
-    
+    savedNotes.push(req.body);
+    // console.log(savedNotes);
+    fs.write('./db/db.json', JSON.stringify(savedNotes), (err => 
+      err ? console.error(err) : console.info(`${req.method} request made`)
+      ));
 })
 
 
