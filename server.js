@@ -12,6 +12,8 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static('public'));
 
+app.get('*', (req, res) => res.sendFile(path.join(__dirname, 'public/index.html')));
+
 // Renders notes HTML
 app.get('/notes', (req, res) => res.sendFile(path.join(__dirname, 'public/notes.html')));
 
@@ -33,8 +35,13 @@ app.post('/api/notes', (req, res) => {
       ));
 })
 
+// Deletes note at id (index)
 app.delete('/api/notes/:id', (req, res) => {
-  console.log(req.body)
+  savedNotes.splice(req.params.id - 1, 1)
+
+  fs.writeFile('./db/db.json', JSON.stringify(savedNotes), (err => 
+    err ? console.error(err) : console.log(`${req.method} request made`)
+    ));
 })
 
 app.listen(PORT, () =>
