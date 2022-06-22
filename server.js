@@ -23,12 +23,19 @@ app.get('/api/notes', (req, res) => {
 // Add new notes
 app.post('/api/notes', (req, res) => {
     savedNotes.push(req.body);
-    // console.log(savedNotes);
-    fs.write('./db/db.json', JSON.stringify(savedNotes), (err => 
-      err ? console.error(err) : console.info(`${req.method} request made`)
+    
+    savedNotes.forEach((note, index) => {
+      note.id = index + 1;
+    })
+
+    fs.writeFile('./db/db.json', JSON.stringify(savedNotes), (err => 
+      err ? console.error(err) : console.log(`${req.method} request made`)
       ));
 })
 
+app.delete('/api/notes/:id', (req, res) => {
+  console.log(req.body)
+})
 
 app.listen(PORT, () =>
   console.log(`App listening at ${PORT}`)
